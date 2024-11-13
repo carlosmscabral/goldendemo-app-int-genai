@@ -1,0 +1,26 @@
+{
+	"connection_overrides": [
+		{
+			"taskId": "1",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "bq-cabral-dataset"
+			}
+		},
+		{
+			"taskId": "7",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "bq-cabral-dataset"
+			}
+		}
+	],
+	"integration_overrides": {
+		"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
+		"enableVariableMasking": false,
+		"cloudLoggingDetails": {
+			"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
+			"enableCloudLogging": false
+		}
+	}
+}

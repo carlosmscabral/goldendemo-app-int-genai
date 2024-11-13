@@ -1,0 +1,573 @@
+{
+	"snapshotNumber": "11",
+	"triggerConfigs": [
+		{
+			"label": "Gen Row Description",
+			"triggerType": "PRIVATE_TRIGGER",
+			"triggerNumber": "2",
+			"triggerId": "private_trigger/generate-house-descriptions_Private_1",
+			"startTasks": [
+				{
+					"taskId": "4"
+				}
+			],
+			"properties": {
+				"Trigger name": "generate-house-descriptions_Private_1"
+			}
+		},
+		{
+			"label": "API Trigger",
+			"triggerType": "API",
+			"triggerNumber": "1",
+			"triggerId": "api_trigger/generate-house-descriptions_API_1",
+			"startTasks": [
+				{
+					"taskId": "2"
+				}
+			],
+			"properties": {
+				"Trigger name": "generate-house-descriptions_API_1"
+			}
+		}
+	],
+	"taskConfigs": [
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "1",
+			"parameters": {
+				"connectionName": {
+					"key": "connectionName",
+					"value": {
+						"stringValue": "projects/cabral-app-integration/locations/southamerica-east1/connections/bq-cabral-dataset"
+					}
+				},
+				"connectionVersion": {
+					"key": "connectionVersion",
+					"value": {
+						"stringValue": "projects/cabral-app-integration/locations/global/providers/gcp/connectors/bigquery/versions/1"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_1_connectorOutputPayload`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "houses"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_1_filterClause`$"
+					}
+				},
+				"listEntitiesNextPageToken": {
+					"key": "listEntitiesNextPageToken",
+					"value": {
+						"stringValue": "$`Task_1_listEntitiesNextPageToken`$"
+					}
+				},
+				"listEntitiesPageSize": {
+					"key": "listEntitiesPageSize",
+					"value": {
+						"stringValue": "$`Task_1_listEntitiesPageSize`$"
+					}
+				},
+				"listEntitiesPageToken": {
+					"key": "listEntitiesPageToken",
+					"value": {
+						"stringValue": "$`Task_1_listEntitiesPageToken`$"
+					}
+				},
+				"listEntitiesSortByColumns": {
+					"key": "listEntitiesSortByColumns",
+					"value": {
+						"stringValue": "$`Task_1_listEntitiesSortByColumns`$"
+					}
+				},
+				"operation": {
+					"key": "operation",
+					"value": {
+						"stringValue": "LIST_ENTITIES"
+					}
+				}
+			},
+			"displayName": "BQ - Get Houses",
+			"nextTasks": [
+				{
+					"taskId": "5"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "JsonnetMapperTask",
+			"taskId": "2",
+			"parameters": {
+				"diagramMetadata": {
+					"key": "diagramMetadata",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/google.protobuf.Struct\",\n  \"value\": {\n    \"0\": {\n      \"outputs\": [{\n        \"name\": \"`Task_1_listEntitiesPageSize`\",\n        \"type\": 2.0,\n        \"tokenType\": 0.0\n      }],\n      \"inputs\": [{\n        \"name\": \"rows\",\n        \"type\": 2.0,\n        \"value\": \"100\",\n        \"tokenType\": 2.0\n      }],\n      \"mappings\": [{\n        \"inputs\": [\"rows\"],\n        \"output\": \"`Task_1_listEntitiesPageSize`\"\n      }]\n    }\n  }\n}"
+					}
+				},
+				"template": {
+					"key": "template",
+					"value": {
+						"stringValue": "local f = import \"functions\";\nlocal inputs = {\"rows\": 100};\n{\"`Task_1_listEntitiesPageSize`\": inputs[\"rows\"]}"
+					}
+				}
+			},
+			"displayName": "Data Transformer (Preview)",
+			"nextTasks": [
+				{
+					"taskId": "1"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "JsonnetMapperTask",
+			"taskId": "4",
+			"parameters": {
+				"diagramMetadata": {
+					"key": "diagramMetadata",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/google.protobuf.Struct\",\n  \"value\": {\n    \"0\": {\n      \"inputs\": [{\n        \"name\": \"promptTemplate\",\n        \"type\": 1.0,\n        \"tokenType\": 0.0\n      }, {\n        \"name\": \"bqRow\",\n        \"type\": 17.0,\n        \"tokenType\": 0.0\n      }],\n      \"outputs\": [{\n        \"name\": \"renderedPrompt\",\n        \"type\": 1.0,\n        \"tokenType\": 0.0\n      }],\n      \"mappings\": [{\n        \"transformation\": {\n          \"coordinates\": [661.0, 151.0],\n          \"operationId\": \"TRANSFORMATION_0\",\n          \"operations\": [{\n            \"type\": 1.0,\n            \"key\": 0.0,\n            \"params\": [{\n              \"type\": 3.0,\n              \"value\": \"bqRow\",\n              \"datatype\": 17.0\n            }]\n          }, {\n            \"type\": 1.0,\n            \"key\": 13.0,\n            \"params\": [{\n              \"type\": 3.0,\n              \"value\": \"promptTemplate\",\n              \"datatype\": 1.0\n            }, {\n              \"type\": 0.0,\n              \"value\": \"[data]\",\n              \"datatype\": 1.0\n            }, {\n              \"type\": 4.0,\n              \"value\": \"previousOperation\",\n              \"datatype\": 0.0\n            }]\n          }],\n          \"readableName\": \"renderTemplate\"\n        },\n        \"inputs\": [\"bqRow\", \"promptTemplate\"],\n        \"output\": \"renderedPrompt\"\n      }]\n    }\n  }\n}"
+					}
+				},
+				"template": {
+					"key": "template",
+					"value": {
+						"stringValue": "local f = import \"functions\";\nlocal inputs = {\"promptTemplate\": std.extVar(\"promptTemplate\"),\"bqRow\": std.extVar(\"bqRow\")};\n{\"renderedPrompt\": std.strReplace(inputs[\"promptTemplate\"],\"[data]\",std.toString(inputs[\"bqRow\"]))}"
+					}
+				}
+			},
+			"displayName": "RenderTemplate",
+			"nextTasks": [
+				{
+					"taskId": "6"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "SubWorkflowScatterGatherTask",
+			"taskId": "5",
+			"parameters": {
+				"aggregatorMap": {
+					"key": "aggregatorMap",
+					"value": {
+						"stringArray": {}
+					}
+				},
+				"disableEucPropagation": {
+					"key": "disableEucPropagation",
+					"value": {
+						"booleanValue": false
+					}
+				},
+				"executionStrategy": {
+					"key": "executionStrategy",
+					"value": {
+						"stringValue": "ASYNC"
+					}
+				},
+				"ignoreIndividualFailures": {
+					"key": "ignoreIndividualFailures",
+					"value": {
+						"booleanValue": true
+					}
+				},
+				"inputMap": {
+					"key": "inputMap",
+					"value": {
+						"stringArray": {}
+					}
+				},
+				"listToScatter": {
+					"key": "listToScatter",
+					"value": {
+						"stringValue": "$`Task_1_connectorOutputPayload`$"
+					}
+				},
+				"maxParallelScatters": {
+					"key": "maxParallelScatters",
+					"value": {
+						"intValue": "15"
+					}
+				},
+				"requestParamsMap": {
+					"key": "requestParamsMap",
+					"value": {}
+				},
+				"responseAggregatorMap": {
+					"key": "responseAggregatorMap",
+					"value": {}
+				},
+				"scatterElementParam": {
+					"key": "scatterElementParam",
+					"value": {
+						"stringValue": ""
+					}
+				},
+				"scatterResponseJson": {
+					"key": "scatterResponseJson",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_5_scatterResponseJson`$"
+							]
+						}
+					}
+				},
+				"staggeredScheduleByBatch": {
+					"key": "staggeredScheduleByBatch",
+					"value": {
+						"intValue": "20000"
+					}
+				},
+				"subworkflowInput": {
+					"key": "subworkflowInput",
+					"value": {
+						"stringValue": "bqRow"
+					}
+				},
+				"timeInMsToSchedule": {
+					"key": "timeInMsToSchedule",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"triggerId": {
+					"key": "triggerId",
+					"value": {
+						"stringValue": "private_trigger/generate-house-descriptions_Private_1"
+					}
+				},
+				"workflowName": {
+					"key": "workflowName",
+					"value": {
+						"stringValue": "generate-house-descriptions"
+					}
+				}
+			},
+			"displayName": "For Each Parallel",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "SubWorkflowExecutorV2Task",
+			"taskId": "6",
+			"parameters": {
+				"disableEUCPropagation": {
+					"key": "disableEUCPropagation",
+					"value": {
+						"booleanValue": false
+					}
+				},
+				"executionIds": {
+					"key": "executionIds",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_6_executionIds`$"
+							]
+						}
+					}
+				},
+				"executionStrategy": {
+					"key": "executionStrategy",
+					"value": {
+						"stringValue": "SYNC"
+					}
+				},
+				"inputMap": {
+					"key": "inputMap",
+					"value": {
+						"stringArray": {}
+					}
+				},
+				"overrideParamsMap": {
+					"key": "overrideParamsMap",
+					"value": {
+						"stringArray": {}
+					}
+				},
+				"requestParamsMap": {
+					"key": "requestParamsMap",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"renderedPrompt\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"prompt\"\n      }\n    }\n  }]\n}"
+					}
+				},
+				"responseParamsMap": {
+					"key": "responseParamsMap",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"output\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"generatedDescription\"\n      }\n    }\n  }]\n}"
+					}
+				},
+				"timeInMsToSchedule": {
+					"key": "timeInMsToSchedule",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"triggerId": {
+					"key": "triggerId",
+					"value": {
+						"stringValue": "private_trigger/gemini-multimodal_Private_1"
+					}
+				},
+				"workflowName": {
+					"key": "workflowName",
+					"value": {
+						"stringValue": "gemini-multimodal"
+					}
+				}
+			},
+			"displayName": "Invoke Gemini",
+			"nextTasks": [
+				{
+					"taskId": "8"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "7",
+			"parameters": {
+				"connectionName": {
+					"key": "connectionName",
+					"value": {
+						"stringValue": "projects/cabral-app-integration/locations/southamerica-east1/connections/bq-cabral-dataset"
+					}
+				},
+				"connectionVersion": {
+					"key": "connectionVersion",
+					"value": {
+						"stringValue": "projects/cabral-app-integration/locations/global/providers/gcp/connectors/bigquery/versions/1"
+					}
+				},
+				"connectorInputPayload": {
+					"key": "connectorInputPayload",
+					"value": {
+						"stringValue": "$`Task_7_connectorInputPayload`$"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_7_connectorOutputPayload`$"
+					}
+				},
+				"entityId": {
+					"key": "entityId",
+					"value": {
+						"stringValue": "$`Task_7_entityId`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "houses"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_7_filterClause`$"
+					}
+				},
+				"operation": {
+					"key": "operation",
+					"value": {
+						"stringValue": "UPDATE_ENTITY"
+					}
+				}
+			},
+			"displayName": "Update BQ",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "JsonnetMapperTask",
+			"taskId": "8",
+			"parameters": {
+				"diagramMetadata": {
+					"key": "diagramMetadata",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/google.protobuf.Struct\",\n  \"value\": {\n    \"0\": {\n      \"inputs\": [{\n        \"name\": \"generatedDescription\",\n        \"type\": 1.0,\n        \"tokenType\": 0.0\n      }, {\n        \"name\": \"bqRow\",\n        \"type\": 17.0,\n        \"tokenType\": 0.0\n      }],\n      \"outputs\": [{\n        \"name\": \"`Task_7_connectorInputPayload`\",\n        \"type\": 17.0,\n        \"tokenType\": 0.0\n      }, {\n        \"name\": \"`Task_7_filterClause`\",\n        \"type\": 1.0,\n        \"tokenType\": 0.0\n      }],\n      \"mappings\": [{\n        \"inputs\": [\"bqRow\"],\n        \"output\": \"`Task_7_connectorInputPayload`\"\n      }, {\n        \"inputs\": [\"generatedDescription\"],\n        \"output\": \"`Task_7_connectorInputPayload`.OverallCond\"\n      }]\n    }\n  }\n}"
+					}
+				},
+				"template": {
+					"key": "template",
+					"value": {
+						"stringValue": "local f = import \"functions\";\nlocal generatedDescription =  std.extVar(\"generatedDescription\");\nlocal bqRow=  std.extVar(\"bqRow\");\n\nlocal updatedBqRow = bqRow { GenerativeDescription: generatedDescription };\n\n{\n    \"`Task_7_connectorInputPayload`\": updatedBqRow,\n    \"`Task_7_filterClause`\": \"EntityId =\" + updatedBqRow.EntityId,\n}"
+					}
+				}
+			},
+			"displayName": "Data Transformer (Preview) 1",
+			"nextTasks": [
+				{
+					"taskId": "7"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		}
+	],
+	"integrationParameters": [
+		{
+			"key": "`ExecutionMode`",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			},
+			"isTransient": true
+		},
+		{
+			"key": "`ErrorInfo`",
+			"dataType": "JSON_VALUE",
+			"defaultValue": {
+				"jsonValue": "{\n  \"message\": \"\",\n  \"code\": 0.0\n}"
+			},
+			"isTransient": true,
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"code\": {\n      \"type\": \"number\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+		},
+		{
+			"key": "`ExecutionId`",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			},
+			"isTransient": true
+		},
+		{
+			"key": "`IntegrationName`",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			},
+			"isTransient": true
+		},
+		{
+			"key": "`Region`",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			},
+			"isTransient": true
+		},
+		{
+			"key": "`ProjectId`",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			},
+			"isTransient": true
+		},
+		{
+			"key": "`Task_1_listEntitiesPageSize`",
+			"dataType": "INT_VALUE",
+			"producer": "1_1"
+		},
+		{
+			"key": "`Task_1_listEntitiesPageToken`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_1"
+		},
+		{
+			"key": "`Task_1_listEntitiesSortByColumns`",
+			"dataType": "STRING_ARRAY",
+			"producer": "1_1"
+		},
+		{
+			"key": "`Task_1_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_1"
+		},
+		{
+			"key": "`Task_1_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "1_1",
+			"jsonSchema": "{\n  \"type\": [\"array\"],\n  \"items\": {\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"MiscVal\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"GarageType\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Alley\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BsmtQual\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"LandSlope\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"RoofMatl\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GarageCars\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"BsmtExposure\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"MasVnrType\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BsmtFinType2\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"PoolArea\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"MasVnrArea\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BsmtCond\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Electrical\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"FullBath\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"BsmtHalfBath\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"TotRmsAbvGrd\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"MoSold\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Heating\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"1stFlrSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"LotArea\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"OverallQual\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"ScreenPorch\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Neighborhood\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BedroomAbvGr\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"LotShape\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GarageFinish\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GarageQual\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GarageArea\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"MiscFeature\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"YearRemodAdd\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"BsmtFullBath\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"SalePrice\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"LandContour\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"LotConfig\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BsmtUnfSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"YearBuilt\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"BsmtFinType1\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"2ndFlrSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"3SsnPorch\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"HouseStyle\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"PavedDrive\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"ExterQual\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Condition1\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"LowQualFinSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"SaleType\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GarageYrBlt\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"YrSold\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"BsmtFinSF2\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"FireplaceQu\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"TotalBsmtSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"EntityId\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Foundation\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Fence\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"OverallCond\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"CentralAir\": {\n        \"type\": [\"boolean\", \"null\"]\n      },\n      \"Exterior1st\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Functional\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"EnclosedPorch\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"MSZoning\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"WoodDeckSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"SaleCondition\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"OpenPorchSF\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"LotFrontage\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BldgType\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"KitchenQual\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GenerativeImage\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"KitchenAbvGr\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Fireplaces\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Exterior2nd\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GenerativeDescription\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"PoolQC\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Street\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"HalfBath\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"Condition2\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"HeatingQC\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"ExterCond\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"Utilities\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"RoofStyle\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"BsmtFinSF1\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"MSSubClass\": {\n        \"type\": [\"integer\", \"null\"]\n      },\n      \"GarageCond\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"GrLivArea\": {\n        \"type\": [\"integer\", \"null\"]\n      }\n    }\n  },\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}"
+		},
+		{
+			"key": "`Task_1_listEntitiesNextPageToken`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_1"
+		},
+		{
+			"key": "`Task_5_scatterResponseJson`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "1_5"
+		},
+		{
+			"key": "bqRow",
+			"dataType": "JSON_VALUE",
+			"defaultValue": {
+				"jsonValue": "{\n}"
+			},
+			"inputOutputType": "IN"
+		},
+		{
+			"key": "promptTemplate",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": "In this row data, you have a lot of information about a house, it size, rooms, age, garage and many other information. Please generate a comprehensive and complete description of it for input into an e-commerce website. Row/House data: [data]"
+			}
+		},
+		{
+			"key": "renderedPrompt",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "`Task_6_executionIds`",
+			"dataType": "STRING_ARRAY",
+			"isTransient": true,
+			"producer": "1_6"
+		},
+		{
+			"key": "generatedDescription",
+			"dataType": "STRING_VALUE"
+		},
+		{
+			"key": "`Task_7_connectorInputPayload`",
+			"dataType": "JSON_VALUE",
+			"producer": "1_7",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"2ndFlrSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"LotArea\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"KitchenQual\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"OverallCond\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"LotFrontage\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"SaleType\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"LotShape\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"LandContour\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GarageCars\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Heating\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Neighborhood\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MSSubClass\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"ExterCond\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"1stFlrSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Foundation\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"KitchenAbvGr\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"TotalBsmtSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"EntityId\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"BsmtHalfBath\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Fence\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"PavedDrive\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Utilities\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GenerativeDescription\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"ExterQual\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BsmtFinType1\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"RoofMatl\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Electrical\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MoSold\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"TotRmsAbvGrd\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"YrSold\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"GrLivArea\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"GarageYrBlt\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BsmtFinType2\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"FireplaceQu\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Condition2\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BsmtQual\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"PoolArea\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"LowQualFinSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"BsmtFinSF1\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"GarageArea\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"BsmtCond\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"CentralAir\": {\n      \"type\": [\"boolean\", \"null\"]\n    },\n    \"HalfBath\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"MasVnrType\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MiscVal\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Alley\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"FullBath\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"ScreenPorch\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"HouseStyle\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"RoofStyle\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"OpenPorchSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Exterior1st\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Functional\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BedroomAbvGr\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"BsmtUnfSF\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Exterior2nd\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MasVnrArea\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BsmtFinSF2\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"SaleCondition\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"YearBuilt\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"BsmtExposure\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GarageCond\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"Fireplaces\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"LotConfig\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GarageFinish\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"YearRemodAdd\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"EnclosedPorch\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"HeatingQC\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BldgType\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MSZoning\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"PoolQC\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GenerativeImage\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"GarageType\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"BsmtFullBath\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Street\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"SalePrice\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"GarageQual\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"MiscFeature\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"3SsnPorch\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"Condition1\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"LandSlope\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"OverallQual\": {\n      \"type\": [\"integer\", \"null\"]\n    },\n    \"WoodDeckSF\": {\n      \"type\": [\"integer\", \"null\"]\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_7_entityId`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_7"
+		},
+		{
+			"key": "`Task_7_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_7"
+		},
+		{
+			"key": "`Task_7_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "1_7"
+		}
+	],
+	"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
+	"cloudLoggingDetails": {
+		"cloudLoggingSeverity": "",
+		"enableCloudLogging": false
+	}
+}
