@@ -27,6 +27,6 @@ TOKEN=$(gcloud auth print-access-token)
 integrationcli token cache -t $TOKEN
 integrationcli prefs set --reg=$REGION --proj=$PROJECT_ID
 
-
+# integrationcli integrations scaffold -s [VERSION_TO_SCAFFOLD_HERE] -n generate-house-descriptions -e dev
 integrationcli integrations apply -f . -e dev --wait=true
 

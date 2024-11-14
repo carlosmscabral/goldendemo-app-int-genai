@@ -1,5 +1,5 @@
 {
-	"snapshotNumber": "11",
+	"snapshotNumber": "2",
 	"triggerConfigs": [
 		{
 			"label": "Gen Row Description",
@@ -414,7 +414,7 @@
 					}
 				}
 			},
-			"displayName": "Data Transformer (Preview) 1",
+			"displayName": "Prep BQ Update",
 			"nextTasks": [
 				{
 					"taskId": "7"
@@ -567,7 +567,7 @@
 	],
 	"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
 	"cloudLoggingDetails": {
-		"cloudLoggingSeverity": "",
+		"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
 		"enableCloudLogging": false
 	}
 }
