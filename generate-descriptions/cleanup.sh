@@ -22,4 +22,6 @@ echo "Cleaning up..."
 
 integrationcli integrations delete -n generate-house-descriptions
 
+bq query --use_legacy_sql=false 'UPDATE `cabral-app-integration.cabral_dataset.houses` SET GenerativeDescription = "" WHERE 1=1;'
+
 echo "DONE"
