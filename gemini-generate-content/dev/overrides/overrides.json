@@ -12,8 +12,8 @@
 		"databasePersistencePolicy": "DATABASE_PERSISTENCE_POLICY_UNSPECIFIED",
 		"enableVariableMasking": false,
 		"cloudLoggingDetails": {
-			"cloudLoggingSeverity": "INFO",
-			"enableCloudLogging": true
+			"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
+			"enableCloudLogging": false
 		}
 	}
 }

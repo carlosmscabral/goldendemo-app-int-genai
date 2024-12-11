@@ -21,8 +21,8 @@
 # integrationcli prefs set -p $project -r $region -t $token
 
 # Export with: 
-# integrationcli integrations scaffold -n gemini-multimodal -s 14 -e dev --cloud-build --cloud-deploy
-# integrationcli integrations scaffold -n gemini-multimodal -s 14 -e dev --cloud-build --cloud-deploy --skip-connectors
+# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev 
+# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev  --skip-connectors
 
-# Deploy with: (change overrides for connection name to use the config variable name)
+# Deploy with: (change config variable names properly)
 # integrationcli integrations apply -f . -e dev --wait=true
