@@ -21,8 +21,8 @@
 # integrationcli prefs set -p $project -r $region -t $token
 
 # Export with: 
-# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev 
-# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev  --skip-connectors
+# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev -x -f .
+# integrationcli integrations scaffold -n gemini-generate-content -s 1 -e dev -x -f . --skip-connectors
 
 # Deploy with: (change config variable names properly)
 # integrationcli integrations apply -f . -e dev --wait=true
